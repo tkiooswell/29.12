@@ -1,0 +1,91 @@
+#include <iostream>
+#pragma once
+using namespace std;
+class Stacks {
+	enum { EMPTY = -1, FULL = 50 };
+	char st[FULL + 1];
+	int top;
+public:
+	Stacks();
+	void PushStack(char c);
+	char PopStack();
+	void ClearStack();
+	bool IsEmptyStack();
+	bool IsFullStack();
+	int GetCountStack();
+	char GetTopStack();
+};
+
+Stacks::Stacks() {
+	
+	top = EMPTY;
+}
+
+char Stacks::GetTopStack() {
+	return st[top];
+}
+
+void Stacks::ClearStack() {
+	top = EMPTY;
+}
+
+bool Stacks::IsEmptyStack() {
+	return top == EMPTY;
+}
+
+bool Stacks::IsFullStack() {
+	return top == FULL;
+}
+
+int Stacks::GetCountStack() {
+	return top + 1;
+}
+
+void Stacks::PushStack(char c) {
+	if (!IsFullStack())
+		st[++top] = c;
+}
+
+char Stacks::PopStack() {
+	if (!IsEmptyStack())
+		return st[top - 1];
+	else
+		return 0;
+}
+
+
+#include <iostream>
+#include <string>
+#include "Stack.h"
+using namespace std;
+
+
+string HooksCheck(string str) {
+    string buffStr; 
+    Stacks st; 
+    for (auto i = str.begin(); i < str.end(); i++) {
+        buffStr.push_back(*i); 
+        switch (*i) { 
+            case '(': 
+                st.PushStack(')');
+                break;
+            case '[':
+                st.PushStack(']');
+                break;
+            case '{':
+                st.PushStack('}');
+                break;
+
+            case ')':
+            case ']':
+            case '}':
+                if (st.IsEmptyStack() || st.GetTopStack() != *i) {
+                    return buffStr;
+                }
+                st.PopStack();
+            default:
+                break;
+        }           
+    }
+    return "OK";
+}
